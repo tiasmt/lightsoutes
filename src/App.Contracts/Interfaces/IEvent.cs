@@ -1,9 +1,9 @@
-namespace App.Contracts.Models.Interfaces.Entities
+namespace App.Contracts.Models.Interfaces
 {
     public interface IEvent
     {
-        string UserId {get;}
-        string GameId {get;}
+        string PlayerName {get;}
+        string GameName {get;}
         string EventType { get; }
     }
 }
