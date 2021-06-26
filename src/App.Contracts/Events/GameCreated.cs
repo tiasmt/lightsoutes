@@ -1,14 +1,13 @@
-using App.Contracts.Models.Interfaces;
+using App.Contracts.Interfaces;
 
-namespace App.Contracts.Models.Events
+namespace App.Contracts.Events
 {
     public class GameCreated : IEvent
     {
-        public GameCreated(string playerName, string gameName, string eventType)
+        public GameCreated(string playerName, string gameName)
         {
             PlayerName = playerName;
             GameName = gameName;
-            EventType = eventType;
         }
         public string PlayerName { get; }
 

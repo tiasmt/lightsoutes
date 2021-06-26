@@ -1,4 +1,4 @@
-namespace App.Contracts.Models.Interfaces
+namespace App.Contracts.Interfaces
 {
     public interface IEvent
     {

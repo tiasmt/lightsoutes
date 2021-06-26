@@ -4,9 +4,8 @@ namespace App.Contracts.Interfaces
 {
     public interface IGameService
     {
-        Task CreateGame(int size);
+        Task CreateGame(int size, string gameName, string playerName);
         Task StartGame();
-        Task CreateBoard();
-        Task ToggleLight(int x, int y);
+        Task ToggleLight(int gameId, int x, int y);
     }
 }

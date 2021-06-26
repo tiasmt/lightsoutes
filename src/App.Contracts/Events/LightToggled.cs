@@ -1,4 +1,4 @@
-using App.Contracts.Models.Interfaces;
+using App.Contracts.Interfaces;
 
 namespace App.Contracts.Events
 {
