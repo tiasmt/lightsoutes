@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace App.Contracts.Entities
 {
-    public class Game
+    public class SnapshotEvent : Event
     {
+        public long Version { get; set; }
     }
 }
