@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using App.DataLayer;
 
 namespace App.Core
 {
@@ -32,6 +34,16 @@ namespace App.Core
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "App.API", Version = "v1" });
             });
+
+            services.AddDbContext<GameContext>(
+                    options =>
+                        options.UseSqlServer(
+                            Configuration.GetConnectionString("MyLocalDB"),
+                            x => x.MigrationsAssembly("App.DataLayer")));
+
+            //services.AddDbContext<GameContext>(
+            //        options =>
+            //            options.UseInMemoryDatabase("InMemory"), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
