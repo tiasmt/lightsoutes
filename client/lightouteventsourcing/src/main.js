@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     baseUrl = 'https://localhost:5501';
 }
-export const apiRestHost = baseUrl + '/rest/api/latest';
+export const apiRestHost = baseUrl;
 
 // Setup axios as the Vue default $http library
 axios.defaults.baseURL = baseUrl; // same as the Url the server listens to

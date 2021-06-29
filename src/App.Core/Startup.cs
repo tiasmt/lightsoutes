@@ -17,6 +17,7 @@ using App.Contracts.Interfaces;
 using App.Core.Services;
 using App.Contracts.Repository;
 using App.DataLayer.Repository;
+using App.Core.Hubs;
 
 namespace App.Core
 {
@@ -33,7 +34,17 @@ namespace App.Core
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:8081").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                        builder.WithOrigins("http://localhost:8081").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+                    });
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "App.API", Version = "v1" });
@@ -51,6 +62,8 @@ namespace App.Core
             services.AddDbContext<GameContext>(
                     options =>
                         options.UseInMemoryDatabase("InMemory"), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
+            services.AddControllers();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,11 +80,14 @@ namespace App.Core
 
             app.UseRouting();
 
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<GameHub>("/gamehub");
             });
         }
     }

@@ -14,8 +14,13 @@
 <script>
 export default {
   name: "Home",
-  props: {
-    msg: String,
+  data() {
+    return {};
+  },
+  methods: {
+    CreateGame() {
+      this.$store.dispatch("CreateGame");
+    },
   },
 };
 </script>
@@ -46,8 +51,8 @@ a {
 }
 
 .head {
-    margin-top: 5%;
-    height: 100px;
+  margin-top: 5%;
+  height: 100px;
 }
 
 .options {
@@ -56,7 +61,7 @@ a {
 }
 
 .button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .create {
@@ -73,9 +78,8 @@ a {
 }
 
 .create:hover {
-    color: #f5f5f5;
-    border: 1px solid #f5f5f5;
-    background-color: #77da9e;
+  color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  background-color: #77da9e;
 }
-
 </style>
