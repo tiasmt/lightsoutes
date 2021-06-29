@@ -2,12 +2,18 @@ using App.Contracts.Interfaces;
 
 namespace App.Contracts.Events
 {
-    public class LightToggled : IEvent
+    public record LightToggled : IEvent
     {
-        public string PlayerName => throw new System.NotImplementedException();
-
-        public string GameName => throw new System.NotImplementedException();
+        public LightToggled(string gameName, int posX, int posY)
+        {
+            GameName = gameName;
+            PosX = posX;
+            PosY = posY;
+        }
 
         public string EventType { get; } = nameof(LightToggled);
+        public string GameName { get;}
+        public int PosX { get; }
+        public int PosY { get; }
     }
 }

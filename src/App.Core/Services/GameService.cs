@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Contracts.Entities;
 using App.Contracts.Events;
 using App.Contracts.Interfaces;
+using App.Contracts.Models;
 using App.Contracts.Repository;
+using App.Core.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace App.Core.Services
 {
@@ -13,30 +17,64 @@ namespace App.Core.Services
         private readonly IList<IEvent> _events = new List<IEvent>();
         private readonly IList<IEvent> _uncommittedevents = new List<IEvent>();
         private readonly IEventRepository _repository;
+        private readonly IHubContext<GameHub, IGameHub> _gameHub;
+
         public int Version { get; protected set; }
         private Game _gameState;
 
-        public GameService(IEventRepository repository)
+        public GameService(IEventRepository repository, IHubContext<GameHub, IGameHub> gameHub)
         {
             _repository = repository;
+            _gameHub = gameHub;
         }
 
-        public async Task CreateGame(int size, string gameName, string playerName)
+        public async Task CreateGame(int boardSize, string gameName, string playerName)
         {
-            //TODO: Add logic
-            await ApplyEvent(new GameCreated(playerName, gameName)); ;
+            if (boardSize <= 0)
+                throw new Exception("Invalid grid size");
+
+            var lightsOn = CreateBoard(boardSize: boardSize);
+            await ApplyEvent(new GameCreated(gameName: gameName, boardSize: boardSize, lightsOn: lightsOn, isActive: true));
         }
 
-        public async Task StartGame()
+        public async Task ToggleLight(string gameName, int x, int y)
         {
-            //TODO: Add logic
-            await ApplyEvent(new GameStarted());
+            await ApplyEvent(new LightToggled(gameName: gameName, posX: x, posY: y));
         }
 
-        public async Task ToggleLight(int gameId, int x, int y)
+        public LightsOn CreateBoard(int boardSize)
         {
-            //TODO: Add logic
-            await ApplyEvent(new LightToggled());
+            var rnd = new Random();
+            var numberOfLightsOn = rnd.Next(1, boardSize);
+            var lightsOn = new LightsOn();
+            for (var i = 0; i < numberOfLightsOn; i++)
+            {
+                int x = rnd.Next(0, boardSize - 1);
+                int y = rnd.Next(0, boardSize - 1);
+                Toggle(lightsOn, x, y);
+            }
+
+            //Edge case where after initializing the game no lights are ON we force 1 to be ON
+            if (!IsGameActive(lightsOn))
+                Toggle(lightsOn, 0, 0);
+
+            return lightsOn;
+        }
+
+        private LightsOn Toggle(LightsOn lights, int x, int y)
+        {
+            if (lights.On.Exists(l => (l.X == x && l.Y == y)))
+                lights.On.RemoveAll(l => (l.X == x && l.Y == y));
+            else
+                lights.On.Add(new Position(x, y));
+
+            return lights;
+        }
+
+        private bool IsGameActive(LightsOn lightsOn)
+        {
+            var result = lightsOn.On.Count > 0 ? true : false;
+            return result;
         }
 
         public IList<IEvent> GetEvents()
@@ -57,15 +95,12 @@ namespace App.Core.Services
                 case LightToggled lightToggled:
                     Apply(lightToggled);
                     break;
-                case GameStarted gameStarted:
-                    Apply(gameStarted);
-                    break;
             }
 
             if (isFastForward == false)
             {
                 _uncommittedevents.Add(evnt);
-                //await _portfolioHub.Clients.All.UpdatePortfolio(_portfolioState);
+                await _gameHub.Clients.All.UpdateGame(_gameState);
             }
             else
             {
@@ -85,15 +120,38 @@ namespace App.Core.Services
         }
 
         private void Apply(GameCreated gameCreated)
-        {          
+        {
+            _gameState.IsActive = gameCreated.IsActive;
+            _gameState.LightsOn = gameCreated.LightsOn;
+            _gameState.BoardSize = gameCreated.BoardSize;
         }
 
 
         private void Apply(LightToggled lightToggled)
-        { }
+        {
+            _gameState.LightsOn = ToggleLights(_gameState.LightsOn, lightToggled.PosX, lightToggled.PosY, _gameState.BoardSize);
 
-        private void Apply(GameStarted gameStarted)
-        { }
+        }
+
+        public LightsOn ToggleLights(LightsOn lights, int x, int y, int size)
+        {
+
+            if (x >= size || y >= size || x < 0 || y < 0)
+                throw new Exception("Incorrect position specified");
+
+            Toggle(lights, x, y);
+
+            if (x > 0)
+                Toggle(lights, x - 1, y);
+            if (y > 0)
+                Toggle(lights, x, y - 1);
+            if (x < size - 1)
+                Toggle(lights, x + 1, y);
+            if (y < size - 1)
+                Toggle(lights, x, y + 1);
+
+            return lights;
+        }
 
         public async Task<Game> GetState(string gameName)
         {

@@ -1,18 +1,22 @@
 using App.Contracts.Interfaces;
+using App.Contracts.Models;
 
 namespace App.Contracts.Events
 {
-    public class GameCreated : IEvent
+    public record GameCreated : IEvent
     {
-        public GameCreated(string playerName, string gameName)
+        public GameCreated(string gameName, int boardSize, LightsOn lightsOn, bool isActive)
         {
-            PlayerName = playerName;
             GameName = gameName;
+            BoardSize = boardSize;
+            LightsOn = lightsOn;
+            IsActive = isActive;
         }
-        public string PlayerName { get; }
-
         public string GameName { get; }
 
+        public int BoardSize { get; }
+        public LightsOn LightsOn { get; }
+        public bool IsActive { get; }
         public string EventType { get; } = nameof(GameCreated);
 
     }

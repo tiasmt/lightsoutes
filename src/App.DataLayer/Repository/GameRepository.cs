@@ -18,9 +18,9 @@ namespace App.DataLayer.Repository
         private readonly GameContext _context;
         //get from config
         private readonly int _snapshotInterval = 5;
-        public GameEventRepository()
+        public GameEventRepository(GameContext context)
         {
-
+            _context = context;
         }
 
         public async Task<IList<IEvent>> GetEvents(string gameName, long start = 0)

@@ -18,15 +18,16 @@ namespace App.Core.Controllers
             _logger = logger;
         }
 
+        [HttpPost("CreateGame")]
         public async Task<IActionResult> CreateGame(int boardSize, string gameName, string playerName)
         {
             await _gameService.CreateGame(boardSize, gameName, playerName);
             return Ok();
         }
-
-        public async Task<IActionResult> ToggleLight(int gameId, int x, int y)
+        [HttpPost("ToggleLight")]
+        public async Task<IActionResult> ToggleLight(string gameName, int x, int y)
         {
-            await _gameService.ToggleLight(gameId, x, y);
+            await _gameService.ToggleLight(gameName, x, y);
             return Ok();
         }
     }
