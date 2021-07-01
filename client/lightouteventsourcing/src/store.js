@@ -13,13 +13,12 @@ export default new Vuex.Store({
     mutations: {
         createGame(state, gameName) {
             state.gameName = gameName;
-            state.isAdmin = true;
-            state.inProgress = false;
-            router.push('/Categories');
+            router.push('/Game');
         }
     },
 
     actions: {
+        //TODO remove hard coded params
         CreateGame({ commit }) {
             axios.post(apiRestHost + "/game/CreateGame",
             {
@@ -27,13 +26,13 @@ export default new Vuex.Store({
             },
             {
                 params: {
-                    gameName: 'test',
+                    gameName: 'test', 
                     boardSize: 2
                 }
             }).
                 then((response) => {
                     if (response.status == 200) {
-                        commit('createGame', response.data);
+                        commit('createGame', 'test');
                     }
                 }).catch((e) => {
                     console.log(e);

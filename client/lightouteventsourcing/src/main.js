@@ -3,6 +3,7 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import axios from 'axios'
+import GameHub from './gamehub'
 
 
 let baseUrl = ''
@@ -18,6 +19,7 @@ axios.defaults.baseURL = baseUrl; // same as the Url the server listens to
 Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
+Vue.use(GameHub);
 
 
 new Vue({
