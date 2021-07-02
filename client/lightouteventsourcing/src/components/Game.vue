@@ -37,6 +37,7 @@
         <br />
       </div>
     </div>
+     <li v-for="event in events" :key="event" class="events">{{event}}</li>
   </div>
 </template>
 
@@ -48,6 +49,7 @@ export default {
       boardSize: 0,
       lightsOn: [],
       isActive: true,
+      events: []
     };
   },
   methods: {
@@ -68,10 +70,15 @@ export default {
       that.isActive = data.isActive;
       console.log(data);
     });
+    this.$gameHub.$on("send-event", (data) => {
+      that.events.push(data);
+      console.log(data);
+    });
   },
   beforeDestroy() {
     // Make sure to cleanup SignalR event handlers when removing the component
     this.$gameHub.$off("update-game");
+    this.$gameHub.$off("send-event");
   },
 };
 </script>
@@ -149,5 +156,10 @@ a {
   color: #f5f5f5;
   border: 1px solid #f5f5f5;
   background-color: #77da9e;
+}
+
+.events {
+    margin-top: 5%;
+    font-size: 50%;
 }
 </style>

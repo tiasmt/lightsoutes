@@ -9,6 +9,7 @@ using App.Contracts.Models;
 using App.Contracts.Repository;
 using App.Core.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace App.Core.Services
 {
@@ -18,28 +19,44 @@ namespace App.Core.Services
         private readonly IList<IEvent> _uncommittedevents = new List<IEvent>();
         private readonly IEventRepository _repository;
         private readonly IHubContext<GameHub, IGameHub> _gameHub;
+        private readonly ILogger<IGameService> _logger;
 
         public int Version { get; protected set; }
         private Game _gameState;
 
-        public GameService(IEventRepository repository, IHubContext<GameHub, IGameHub> gameHub)
+        public GameService(IEventRepository repository, IHubContext<GameHub, IGameHub> gameHub, ILogger<IGameService> logger)
         {
             _repository = repository;
             _gameHub = gameHub;
+            _logger = logger;
         }
 
         public async Task CreateGame(int boardSize, string gameName, string playerName)
         {
-            if (boardSize <= 0)
-                throw new Exception("Invalid grid size");
+            try
+            {
+                if (boardSize <= 0)
+                    throw new Exception("Invalid grid size");
 
-            var lightsOn = CreateBoard(boardSize: boardSize);
-            await ApplyEvent(new GameCreated(gameName: gameName, boardSize: boardSize, lightsOn: lightsOn, isActive: true));
+                var lightsOn = CreateBoard(boardSize: boardSize);
+                await ApplyEvent(new GameCreated(gameName: gameName, boardSize: boardSize, lightsOn: lightsOn, isActive: true));
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex.Message);
+            }
         }
 
         public async Task ToggleLight(string gameName, int x, int y)
         {
-            await ApplyEvent(new LightToggled(gameName: gameName, posX: x, posY: y));
+            try
+            {
+                await ApplyEvent(new LightToggled(gameName: gameName, posX: x, posY: y));
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex.Message);
+            }
         }
 
         public LightsOn CreateBoard(int boardSize)
@@ -106,7 +123,7 @@ namespace App.Core.Services
             {
                 _events.Add(evnt);
             }
-
+            await _gameHub.Clients.All.SendEvent(evnt);
             var uncommittedEvents = GetUncommittedEvents();
             await _repository.Save(uncommittedEvents, _gameState);
 

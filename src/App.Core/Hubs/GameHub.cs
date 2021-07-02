@@ -14,5 +14,10 @@ namespace App.Core.Hubs
         {
             await Clients.All.UpdateGame(game);
         }
+
+        public async Task SentLatestEvent(IEvent evnt)
+        {
+            await Clients.All.SendEvent(evnt);
+        }
     }
 }

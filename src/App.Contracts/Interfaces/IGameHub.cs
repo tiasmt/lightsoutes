@@ -10,5 +10,6 @@ namespace App.Contracts.Interfaces
     public interface IGameHub
     {
         Task UpdateGame(Game game);
+        Task SendEvent(IEvent evnt);
     }
 }

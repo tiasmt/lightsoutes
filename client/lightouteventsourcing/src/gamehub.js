@@ -15,6 +15,9 @@ export default {
         connection.on('UpdateGame', (payload) => {
             gameHub.$emit('update-game', payload)
         });
+        connection.on('SendEvent', (payload) => {
+            gameHub.$emit('send-event', payload)
+        });
 
         let startedPromise = null;
         function start() {
