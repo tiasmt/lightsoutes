@@ -1,18 +1,42 @@
 <template>
   <div class="game">
     <div class="head">
-      <img alt="Lights On" src="../assets/images/ON.svg" />
+      <img
+        alt="Lights On"
+        src="../assets/images/ON.svg"
+        class="image__header"
+      />
       <h3>VS</h3>
-      <img alt="Lights Off" src="../assets/images/OFF.svg" />
+      <img
+        alt="Lights Off"
+        src="../assets/images/OFF.svg"
+        class="image__header"
+      />
     </div>
-    <div v-for="i in boardSize" :key="i">
-      <div v-for="j in boardSize" :key="j">
-          <img v-if="lightsOn.find(item => item.x == i-1 && item.y == j-1) != undefined" alt="Lights On" src="../assets/images/ON.svg" />
-          <img v-else alt="Lights Off" src="../assets/images/OFF.svg" />
+    <div class="board">
+      <div v-for="i in boardSize" :key="i" class="row">
+        <div v-for="j in boardSize" :key="j">
+          <img
+            v-if="
+              lightsOn.find((item) => item.y == i - 1 && item.x == j - 1) !=
+              undefined
+            "
+            alt="Lights On"
+            src="../assets/images/ON.svg"
+            class="light"
+            @click="ToggleLight(j - 1, i - 1)"
+          />
+          <img
+            v-else
+            alt="Lights Off"
+            src="../assets/images/OFF.svg"
+            class="light"
+            @click="ToggleLight(j - 1, i - 1)"
+          />
+        </div>
+        <br />
       </div>
-      <br>
     </div>
-    <div class="board"></div>
   </div>
 </template>
 
@@ -26,13 +50,23 @@ export default {
       isActive: true,
     };
   },
-  methods: {},
+  methods: {
+    ToggleLight(x, y) {
+       this.$store
+        .dispatch("ToggleLight", {
+          gameName: 'test',
+          x: x,
+          y: y,
+        });
+    },
+  },
   created() {
     var that = this;
     this.$gameHub.$on("update-game", (data) => {
       that.boardSize = data.boardSize;
       that.lightsOn = data.lightsOn.on;
       that.isActive = data.isActive;
+      console.log(data);
     });
   },
   beforeDestroy() {
@@ -50,7 +84,7 @@ h3 {
   float: left;
   margin: 40px;
 }
-img {
+.image__header {
   height: 100px;
   float: left;
 }
@@ -77,8 +111,25 @@ a {
   margin-left: 5%;
 }
 
-.button {
+.board {
+  margin-top: 10%;
+  margin-left: 28%;
+}
+
+.row {
+  height: 55px;
+}
+
+.button,
+.light {
   cursor: pointer;
+  border: 1px solid #47494841;
+  border-radius: 5px;
+}
+
+.light {
+  height: 50px;
+  float: left;
 }
 
 .create {
