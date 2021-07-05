@@ -37,29 +37,29 @@
         <br />
       </div>
     </div>
-     <li v-for="event in events" :key="event" class="events">{{event}}</li>
+    <li v-for="(event, index) in events" :key="index" class="events">{{ event }}</li>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Game",
   data() {
     return {
-      boardSize: 0,
-      lightsOn: [],
-      isActive: true,
-      events: []
+      events: [],
     };
+  },
+  computed: {
+    ...mapState(["gameName", "boardSize", "lightsOn", "isActive"]),
   },
   methods: {
     ToggleLight(x, y) {
-       this.$store
-        .dispatch("ToggleLight", {
-          gameName: 'test',
-          x: x,
-          y: y,
-        });
+      this.$store.dispatch("ToggleLight", {
+        gameName: "test",
+        x: x,
+        y: y,
+      });
     },
   },
   created() {
@@ -68,7 +68,7 @@ export default {
       that.boardSize = data.boardSize;
       that.lightsOn = data.lightsOn.on;
       that.isActive = data.isActive;
-      console.log(data);
+      console.log(that.lightsOn);
     });
     this.$gameHub.$on("send-event", (data) => {
       that.events.push(data);
@@ -159,7 +159,7 @@ a {
 }
 
 .events {
-    margin-top: 5%;
-    font-size: 50%;
+  margin-top: 5%;
+  font-size: 50%;
 }
 </style>

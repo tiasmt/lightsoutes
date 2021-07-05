@@ -22,6 +22,15 @@ export default {
       this.$store.dispatch("CreateGame");
     },
   },
+  created() {
+      this.$gameHub.$on("update-game", (data) => {
+      this.$store.dispatch("Update", data);
+    });
+  },
+  beforeDestroy() {
+    // Make sure to cleanup SignalR event handlers when removing the component
+    this.$gameHub.$off("update-game");
+  },
 };
 </script>
 
