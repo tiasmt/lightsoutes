@@ -6,6 +6,8 @@
       <img alt="Lights Off" src="../assets/images/OFF.svg" />
     </div>
     <div class="options">
+      <input class="gamename" v-model="gameName" placeholder="Game Name" />
+      <input class="boardsize" v-model="boardSize" placeholder="Board Size" />
       <a class="button create" @click="CreateGame()">New Game</a>
     </div>
   </div>
@@ -15,15 +17,18 @@
 export default {
   name: "Home",
   data() {
-    return {};
+    return {
+        gameName: "",
+        boardSize: ""
+    };
   },
   methods: {
     CreateGame() {
-      this.$store.dispatch("CreateGame");
+      this.$store.dispatch("CreateGame", {gameName: this.gameName, boardSize: this.boardSize});
     },
   },
   created() {
-      this.$gameHub.$on("update-game", (data) => {
+    this.$gameHub.$on("update-game", (data) => {
       this.$store.dispatch("Update", data);
     });
   },
@@ -73,22 +78,58 @@ a {
   cursor: pointer;
 }
 
-.create {
+.create,
+.gamename,
+.boardsize {
   display: block;
   overflow: hidden;
   text-transform: uppercase;
-  border: 1px solid #77da9e;
-  color: #77da9e;
   border-radius: 40px;
   background-color: rgba(0, 0, 0, 0.048);
   font-weight: 400;
   width: 250px;
   transition: 0.5s ease-in-out;
+  margin-top: 5%;
+}
+
+.gamename {
+  color: #77a2da;
+  border: 1px solid #77a2da;
+}
+
+.boardsize {
+  color: #da7777;
+  border: 1px solid #da7777;
+}
+
+.create {
+  color: #77da9e;
+  border: 1px solid #77da9e;
 }
 
 .create:hover {
   color: #f5f5f5;
   border: 1px solid #f5f5f5;
   background-color: #77da9e;
+}
+
+.gamename,
+.boardsize {
+  font-size: 14px;
+  line-height: 30px;
+  text-align: center;
+  float: left;
+  width: 120px;
+  margin-bottom: 5%;
+  margin-right: 5px;
+  font-weight: 700;
+}
+
+.boardsize::placeholder {
+  color: #da7777;
+}
+
+.gamename::placeholder {
+  color: #77a2da;
 }
 </style>

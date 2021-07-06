@@ -37,7 +37,11 @@
         <br />
       </div>
     </div>
-    <li v-for="(event, index) in events" :key="index" class="events">{{ event }}</li>
+    <div class="events">
+      <li v-for="(event, index) in events" :key="index" class="event">
+        {{ event }}
+      </li>
+    </div>
   </div>
 </template>
 
@@ -55,8 +59,8 @@ export default {
   },
   methods: {
     ToggleLight(x, y) {
+      this.events = [];
       this.$store.dispatch("ToggleLight", {
-        gameName: "test",
         x: x,
         y: y,
       });
@@ -155,7 +159,14 @@ a {
 }
 
 .events {
-  margin-top: 5%;
-  font-size: 50%;
+    border: 1px solid #47494841;
+    border-radius: 20px;
+    width: 60%;
+}
+
+.event {
+  margin: 1%;
+  font-size: 40%;
+  
 }
 </style>

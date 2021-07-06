@@ -14,8 +14,10 @@ export default new Vuex.Store({
         isActive: false
     },
     mutations: {
-        createGame(state, gameName) {
-            state.gameName = gameName;
+        createGame(state, data) {
+            state.gameName = data.gameName;
+            state.boardSize = data.boardSize;
+            state.isActive = true;
             router.push('/Game');
         },
         toggleLight(state) {
@@ -30,21 +32,20 @@ export default new Vuex.Store({
     },
 
     actions: {
-        //TODO remove hard coded params
-        CreateGame({ commit }) {
+        CreateGame({ commit }, data) {
             axios.post(apiRestHost + "/game/CreateGame",
             {
                 'Content-Type': 'application/json'
             },
             {
                 params: {
-                    gameName: 'test', 
-                    boardSize: 2
+                    gameName: data.gameName, 
+                    boardSize: data.boardSize
                 }
             }).
                 then((response) => {
                     if (response.status == 200) {
-                        commit('createGame', 'test');
+                        commit('createGame', data);
                     }
                 }).catch((e) => {
                     console.log(e);
@@ -61,7 +62,7 @@ export default new Vuex.Store({
             },
             {
                 params: {
-                    gameName: 'test', 
+                    gameName: this.state.gameName, 
                     x: data.x,
                     y: data.y
                 }

@@ -18,7 +18,7 @@ export default {
   box-sizing: border-box;
 }
 
-html {
+html, input {
   font-family: "Inter", sans-serif;
   font-weight: 500;
   font-size: 30px;
@@ -26,6 +26,10 @@ html {
   scroll-behavior: smooth;
   color: #2c3e50;
   background-color: transparent;
+}
+
+*:focus {
+    outline: none;
 }
 
 </style>
