@@ -62,17 +62,13 @@ export default {
       });
     },
   },
-  created() {
+  mounted() {
     var that = this;
     this.$gameHub.$on("update-game", (data) => {
-      that.boardSize = data.boardSize;
-      that.lightsOn = data.lightsOn.on;
-      that.isActive = data.isActive;
-      console.log(that.lightsOn);
+      this.$store.dispatch("Update", data);
     });
     this.$gameHub.$on("send-event", (data) => {
       that.events.push(data);
-      console.log(data);
     });
   },
   beforeDestroy() {
