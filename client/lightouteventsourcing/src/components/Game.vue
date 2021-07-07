@@ -1,5 +1,7 @@
 <template>
   <div class="game">
+    <div>{{ gameName }}</div>
+    <div>{{ boardSize }}</div>
     <div class="head">
       <img
         alt="Lights On"
@@ -13,6 +15,7 @@
         class="image__header"
       />
     </div>
+
     <div class="board">
       <div v-for="i in boardSize" :key="i" class="row">
         <div v-for="j in boardSize" :key="j">
@@ -37,6 +40,7 @@
         <br />
       </div>
     </div>
+    <h2>Events</h2>
     <div class="events">
       <li v-for="(event, index) in events" :key="index" class="event">
         {{ event }}
@@ -119,8 +123,7 @@ a {
 }
 
 .board {
-  margin-top: 10%;
-  margin-left: 28%;
+  margin: 5%;
 }
 
 .row {
@@ -159,14 +162,13 @@ a {
 }
 
 .events {
-    border: 1px solid #47494841;
-    border-radius: 20px;
-    width: 60%;
+  border: 1px solid #47494841;
+  border-radius: 20px;
+  width: 60%;
 }
 
 .event {
   margin: 1%;
   font-size: 40%;
-  
 }
 </style>

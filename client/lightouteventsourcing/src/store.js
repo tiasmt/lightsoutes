@@ -9,25 +9,24 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         gameName: "",
-        boardSize: 0,
+        boardSize: null,
         lightsOn: null,
         isActive: false
     },
     mutations: {
         createGame(state, data) {
             state.gameName = data.gameName;
-            state.boardSize = data.boardSize;
+            state.boardSize = parseInt(data.boardSize);
             state.isActive = true;
             router.push('/Game');
         },
         toggleLight(state) {
-            // addEventCounter? 
             console.log(state);
         },
         update(state, data) {
-            state.boardSize = data.boardSize;
             state.lightsOn = data.lightsOn.on;
             state.isActive = data.isActive;
+            state.boardSize = parseInt(data.boardSize);
         }
     },
 
@@ -53,7 +52,6 @@ export default new Vuex.Store({
         },
         Update({ commit }, data) {
             commit('update', data);
-            console.log('updated');
         },
         ToggleLight({ commit }, data) {
             axios.post(apiRestHost + "/game/ToggleLight",
@@ -77,5 +75,17 @@ export default new Vuex.Store({
         },
     },
     getters: {
+        getBoardSize: state => {
+            return state.boardSize;
+        },
+        getGameName: state => {
+            return state.gameName;
+        },
+        getLightsOn: state => {
+            return state.lightsOn;
+        },
+        getIsActive: state => {
+            return state.isActive;
+        }
     }
 });
