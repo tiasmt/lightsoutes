@@ -24,8 +24,8 @@ html, input {
   font-size: 30px;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
-  color: #2c3e50;
-  background-color: transparent;
+  color: #eff7fc;
+  background-color: rgb(92, 90, 90);
 }
 
 *:focus {

@@ -1,7 +1,5 @@
 <template>
   <div class="game">
-    <div>{{ gameName }}</div>
-    <div>{{ boardSize }}</div>
     <div class="head">
       <img
         alt="Lights On"
@@ -15,8 +13,18 @@
         class="image__header"
       />
     </div>
-
-    <div class="board">
+    <div class="info__area">
+      <div class="info">
+        <label class="gamename__label" for="gamename">Game Name </label
+        ><span class="gamename__text">{{ gameName }}</span>
+      </div>
+      <br />
+      <div class="info">
+        <label class="boardsize__label" for="boardsize">Board Size </label
+        ><span class="boardsize__text">{{ boardSize }}</span>
+      </div>
+    </div>
+    <div class="board__area">
       <div v-for="i in boardSize" :key="i" class="row">
         <div v-for="j in boardSize" :key="j">
           <img
@@ -40,11 +48,13 @@
         <br />
       </div>
     </div>
-    <h2>Events</h2>
-    <div class="events">
-      <li v-for="(event, index) in events" :key="index" class="event">
-        {{ event }}
-      </li>
+    <div class="events__area">
+      <label class="events__label" >Events</label>
+      <div class="events__all">
+        <li v-for="(event, index) in events" :key="index" class="event">
+          {{ event }}
+        </li>
+      </div>
     </div>
   </div>
 </template>
@@ -88,9 +98,6 @@ export default {
 </script>
 
 <style scoped>
-.game {
-  margin-left: 40%;
-}
 h3 {
   float: left;
   margin: 40px;
@@ -102,8 +109,8 @@ h3 {
 
 .head,
 .options {
-  width: 400px;
   display: block;
+  margin-left: 35%;
 }
 
 a {
@@ -121,13 +128,56 @@ a {
   margin-top: 10%;
   margin-left: 5%;
 }
+.info__area {
+  margin: 3% 0%;
+  font-size: 70%;
+  /* color: black; */
+}
 
-.board {
-  margin: 5%;
+.info-area label {
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+
+label {
+  text-transform: uppercase;
+  border-radius: 40px;
+  background-color: rgba(0, 0, 0, 0.048);
+  width: 250px;
+  padding: 5px;
+}
+
+.gamename__label {
+  color: #77a2da;
+  border: 1px solid #77a2da;
+}
+
+.events__label {
+  color: #77da9e;
+  border: 1px solid #77da9e;
+}
+
+.boardsize__label {
+  color: #da7777;
+  border: 1px solid #da7777;
+}
+.gamename__text,
+.boardsize__text {
+  margin: 1%;
+}
+.board__area {
+  padding: 10% 15%;
+  width: 25%;
+  float: left;
+  background-color: rgba(0, 0, 0, 0.219);
+  border-radius: 1%;
+  /* border: 1px solid rgba(255, 255, 255, 0.089); */
 }
 
 .row {
   height: 55px;
+  margin-left: 10%;
 }
 
 .button,
@@ -142,29 +192,18 @@ a {
   float: left;
 }
 
-.create {
-  display: block;
-  overflow: hidden;
-  text-transform: uppercase;
-  border: 1px solid #77da9e;
-  color: #77da9e;
-  border-radius: 40px;
-  background-color: rgba(0, 0, 0, 0.048);
-  font-weight: 400;
-  width: 250px;
-  transition: 0.5s ease-in-out;
+.events__area {
+  width: 40%;
+  float: left;
+  margin-left: 2%;
 }
 
-.create:hover {
-  color: #f5f5f5;
-  border: 1px solid #f5f5f5;
-  background-color: #77da9e;
+.events__area h2 {
+  font-size: 75%;
 }
 
-.events {
-  border: 1px solid #47494841;
-  border-radius: 20px;
-  width: 60%;
+.events__all {
+  margin-top: 3%;
 }
 
 .event {
