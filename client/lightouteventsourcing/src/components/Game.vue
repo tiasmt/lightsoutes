@@ -6,7 +6,6 @@
         src="../assets/images/ON.svg"
         class="image__header"
       />
-      <h3>VS</h3>
       <img
         alt="Lights Off"
         src="../assets/images/OFF.svg"
@@ -98,19 +97,24 @@ export default {
 </script>
 
 <style scoped>
+.game {
+    height: 90vh;
+}
 h3 {
   float: left;
   margin: 40px;
 }
+
+
 .image__header {
   height: 100px;
   float: left;
+  margin-right: 5%;
 }
 
-.head,
-.options {
+.head {
   display: block;
-  margin-left: 35%;
+  margin-left: 40%;
 }
 
 a {
@@ -120,17 +124,14 @@ a {
 }
 
 .head {
-  margin-top: 5%;
+  /* padding-top: 5%; */
   height: 100px;
 }
 
-.options {
-  margin-top: 10%;
-  margin-left: 5%;
-}
 .info__area {
-  margin: 3% 0%;
+  margin: 8% 0%;
   font-size: 70%;
+  width: 50%;
   /* color: black; */
 }
 
@@ -167,19 +168,15 @@ label {
 .gamename__text,
 .boardsize__text {
   margin: 1%;
+  text-transform: uppercase;
 }
 .board__area {
-  padding: 10% 15%;
-  width: 25%;
+  padding: 10% 10%;
   float: left;
   background-color: rgba(0, 0, 0, 0.219);
-  border-radius: 1%;
+  border-radius: 50%;
+  display:flex;
   /* border: 1px solid rgba(255, 255, 255, 0.089); */
-}
-
-.row {
-  height: 55px;
-  margin-left: 10%;
 }
 
 .button,
@@ -195,10 +192,12 @@ label {
 }
 
 .events__area {
-  width: 40%;
-  float: left;
-  margin-left: 2%;
+  width: 50%;
+  float: right;
+  padding-left: 2%;
   margin-top: -4%;
+  height: 60vh;
+  border-left: 1px solid #77da9f5d;;
 }
 
 .events__area h2 {
@@ -212,5 +211,6 @@ label {
 .event {
   margin: 1%;
   font-size: 40%;
+  list-style: none;
 }
 </style>
