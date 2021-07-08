@@ -156,6 +156,8 @@ label {
 .events__label {
   color: #77da9e;
   border: 1px solid #77da9e;
+  font-size: 80%;
+  padding: 1% 4%;
 }
 
 .boardsize__label {
@@ -196,6 +198,7 @@ label {
   width: 40%;
   float: left;
   margin-left: 2%;
+  margin-top: -4%;
 }
 
 .events__area h2 {
@@ -203,7 +206,7 @@ label {
 }
 
 .events__all {
-  margin-top: 3%;
+  margin-top: 4%;
 }
 
 .event {
