@@ -73,6 +73,25 @@ export default new Vuex.Store({
                     console.log(e);
                 });
         },
+        Replay({ commit }, end) {
+            axios.post(apiRestHost + "/game/ReplayEvents",
+            {
+                'Content-Type': 'application/json'
+            },
+            {
+                params: {
+                    gameName: this.state.gameName, 
+                    end: end
+                }
+            }).
+                then((response) => {
+                    if (response.status == 200) {
+                        commit('update');
+                    }
+                }).catch((e) => {
+                    console.log(e);
+                });
+        },
     },
     getters: {
         getBoardSize: state => {

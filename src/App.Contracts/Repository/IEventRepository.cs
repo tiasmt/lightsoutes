@@ -9,6 +9,7 @@ namespace App.Contracts.Repository
     {
         Task Save(IList<IEvent> newEvents, Game gameState = null);
         Task<IList<IEvent>> GetEvents(string username, long start = 0);
+        Task<IList<IEvent>> GetEventsTill(string username, long end = 0);
         Task<Snapshot> GetSnapshot(string username);
     }
 }

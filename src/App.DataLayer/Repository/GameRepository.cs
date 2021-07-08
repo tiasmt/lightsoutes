@@ -17,7 +17,7 @@ namespace App.DataLayer.Repository
 
         private readonly GameContext _context;
         //get from config
-        private readonly int _snapshotInterval = 5;
+        private readonly int _snapshotInterval = 200;
         public GameEventRepository(GameContext context)
         {
             _context = context;
@@ -27,6 +27,18 @@ namespace App.DataLayer.Repository
         {
             var events = new List<IEvent>();
             var eventData = await _context.Events.Where(x => x.GameName == gameName).Skip((int)start).ToListAsync();
+            foreach (var evnt in eventData)
+            {
+                IEvent resolvedEvent = DeserializeEvent(evnt);
+                events.Add(resolvedEvent);
+            }
+            return events;
+        }
+
+        public async Task<IList<IEvent>> GetEventsTill(string gameName, long end)
+        {
+            var events = new List<IEvent>();
+            var eventData = await _context.Events.Where(x => x.GameName == gameName).Take((int)end).ToListAsync();
             foreach (var evnt in eventData)
             {
                 IEvent resolvedEvent = DeserializeEvent(evnt);

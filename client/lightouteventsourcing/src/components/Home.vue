@@ -88,7 +88,7 @@ a {
   background-color: rgba(0, 0, 0, 0.048);
   font-weight: 400;
   width: 250px;
-  transition: 0.5s ease-in-out;
+  transition: 0.4s ease-in-out;
   margin-top: 5%;
 }
 
@@ -108,8 +108,8 @@ a {
 }
 
 .create:hover {
-  color: #f5f5f5;
-  border: 1px solid #f5f5f5;
+  color: rgb(92, 90, 90);
+  border: 1px solid rgb(92, 90, 90);
   background-color: #77da9e;
 }
 
