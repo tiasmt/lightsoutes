@@ -17,7 +17,7 @@ namespace App.DataLayer.Repository
 
         private readonly GameContext _context;
         //get from config
-        private readonly int _snapshotInterval = 20;
+        private readonly int _snapshotInterval = 5;
         public GameEventRepository(GameContext context)
         {
             _context = context;

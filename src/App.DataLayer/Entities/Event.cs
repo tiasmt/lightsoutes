@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.DataLayer.Entities
 {
-    public class Event : App.Contracts.Entities.Event
+    public class Event : Contracts.Entities.Event
     {
     }
 

@@ -53,15 +53,15 @@ namespace App.Core
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<IEventRepository, GameEventRepository>();
 
-            //services.AddDbContext<GameContext>(
-            //        options =>
-            //            options.UseSqlServer(
-            //                Configuration.GetConnectionString("MyLocalDB"),
-            //                x => x.MigrationsAssembly("App.DataLayer")));
-
             services.AddDbContext<GameContext>(
                     options =>
-                        options.UseInMemoryDatabase("InMemory"), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
+                        options.UseSqlServer(
+                            Configuration.GetConnectionString("MyLocalDB"),
+                            x => x.MigrationsAssembly("App.DataLayer")));
+
+            //services.AddDbContext<GameContext>(
+            //        options =>
+            //            options.UseInMemoryDatabase("InMemory"), ServiceLifetime.Singleton, ServiceLifetime.Singleton);
             services.AddControllers();
             services.AddSignalR();
         }

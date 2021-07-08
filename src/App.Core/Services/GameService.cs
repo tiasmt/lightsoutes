@@ -178,12 +178,19 @@ namespace App.Core.Services
 
         private async Task GetGame(string gameName)
         {
-            var snapshot = await _repository.GetSnapshot(gameName);
-            _gameState = snapshot.State;
-            var events = await _repository.GetEvents(gameName, snapshot.Version);
-            foreach (var evnt in events)
+            try
             {
-                await ApplyEvent(evnt, true);
+                var snapshot = await _repository.GetSnapshot(gameName);
+                _gameState = snapshot.State;
+                var events = await _repository.GetEvents(gameName, snapshot.Version);
+                foreach (var evnt in events)
+                {
+                    await ApplyEvent(evnt, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex.Message);
             }
         }
     }
