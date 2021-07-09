@@ -59,6 +59,19 @@ namespace App.Core.Services
             }
         }
 
+        public async Task Replay(string gameName, int end)
+        {
+            try
+            {
+                await ApplyEvent(new EmptyEvent( gameName: gameName), end: end);
+            }
+            catch (Exception ex)
+            { 
+                _logger.Log(LogLevel.Error, ex.Message);
+            }
+
+        }
+
         public LightsOn CreateBoard(int boardSize)
         {
             var rnd = new Random();
@@ -99,10 +112,10 @@ namespace App.Core.Services
             return _events;
         }
 
-        public async Task ApplyEvent(IEvent evnt, bool isFastForward = false)
+        public async Task ApplyEvent(IEvent evnt, bool isFastForward = false, int end = 0, bool isReplay = false)
         {
             if (_gameState == null)
-                await GetGame(evnt.GameName);
+                await GetGame(evnt.GameName, end);
 
             switch (evnt)
             {
@@ -114,19 +127,25 @@ namespace App.Core.Services
                     break;
             }
 
-            if (isFastForward == false)
+            if (evnt != null  && isFastForward == false && evnt.EventType != nameof(EmptyEvent))
             {
-                _uncommittedevents.Add(evnt);
+                if (!isReplay)
+                {
+                    _uncommittedevents.Add(evnt);
+                }
                 await _gameHub.Clients.All.UpdateGame(_gameState);
             }
             else
             {
                 _events.Add(evnt);
             }
-            await _gameHub.Clients.All.SendEvent(evnt);
-            var uncommittedEvents = GetUncommittedEvents();
-            await _repository.Save(uncommittedEvents, _gameState);
-
+           
+            if (evnt != null && evnt.EventType != nameof(EmptyEvent))
+            {
+                var uncommittedEvents = GetUncommittedEvents();
+                await _repository.Save(uncommittedEvents, _gameState);
+                await _gameHub.Clients.All.SendEvent(evnt);
+            }
         }
 
         public IList<IEvent> GetUncommittedEvents()
@@ -176,16 +195,18 @@ namespace App.Core.Services
             return _gameState;
         }
 
-        private async Task GetGame(string gameName)
+        private async Task GetGame(string gameName, int end = 0)
         {
             try
             {
+                var isFastForward = end == 0;
+                var isReplay = end != 0;
                 var snapshot = await _repository.GetSnapshot(gameName);
                 _gameState = snapshot.State;
-                var events = await _repository.GetEvents(gameName, snapshot.Version);
+                var events = end == 0 ? await _repository.GetEvents(gameName, snapshot.Version) : await _repository.GetEventsTill(gameName, end);
                 foreach (var evnt in events)
                 {
-                    await ApplyEvent(evnt, true);
+                    await ApplyEvent(evnt, isFastForward, isReplay: isReplay);
                 }
             }
             catch (Exception ex)

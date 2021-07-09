@@ -6,7 +6,6 @@
         src="../assets/images/ON.svg"
         class="image__header"
       />
-      <h3>VS</h3>
       <img
         alt="Lights Off"
         src="../assets/images/OFF.svg"
@@ -23,7 +22,21 @@
         <label class="boardsize__label" for="boardsize">Board Size </label
         ><span class="boardsize__text">{{ boardSize }}</span>
       </div>
+      <div class="slidecontainer">
+        <input
+          type="range"
+          min="1"
+          :max= moveIndex
+          :value= moveNumber
+          class="slider"
+          id="myRange"
+          @input="UpdateMove"
+          @mouseup="ReplayMove"
+        />
+        <p>Move: {{ moveNumber }}</p>
+      </div>
     </div>
+
     <div class="board__area">
       <div v-for="i in boardSize" :key="i" class="row">
         <div v-for="j in boardSize" :key="j">
@@ -49,7 +62,7 @@
       </div>
     </div>
     <div class="events__area">
-      <label class="events__label" >Events</label>
+      <label class="events__label">Events</label>
       <div class="events__all">
         <li v-for="(event, index) in events" :key="index" class="event">
           {{ event }}
@@ -66,6 +79,8 @@ export default {
   data() {
     return {
       events: [],
+      moveNumber: 1,
+      moveIndex: 1
     };
   },
   computed: {
@@ -73,12 +88,22 @@ export default {
   },
   methods: {
     ToggleLight(x, y) {
+        this.moveIndex++;
+        this.moveNumber = this.moveIndex; 
       this.events = [];
       this.$store.dispatch("ToggleLight", {
         x: x,
         y: y,
       });
     },
+    UpdateMove() {
+      this.events = [];
+      var slider = document.getElementById("myRange");
+      this.moveNumber = slider.value;
+    },
+    ReplayMove() {
+        this.$store.dispatch("Replay", this.moveNumber);
+    }
   },
   mounted() {
     var that = this;
@@ -98,19 +123,23 @@ export default {
 </script>
 
 <style scoped>
+.game {
+  height: 90vh;
+}
 h3 {
   float: left;
   margin: 40px;
 }
+
 .image__header {
   height: 100px;
   float: left;
+  margin-right: 5%;
 }
 
-.head,
-.options {
+.head {
   display: block;
-  margin-left: 35%;
+  margin-left: 40%;
 }
 
 a {
@@ -120,17 +149,14 @@ a {
 }
 
 .head {
-  margin-top: 5%;
+  /* padding-top: 5%; */
   height: 100px;
 }
 
-.options {
-  margin-top: 10%;
-  margin-left: 5%;
-}
 .info__area {
-  margin: 3% 0%;
+  margin: 5% 0%;
   font-size: 70%;
+  width: 55%;
   /* color: black; */
 }
 
@@ -138,7 +164,6 @@ a {
   font-weight: 600;
   margin-top: 5px;
 }
-
 
 label {
   text-transform: uppercase;
@@ -167,19 +192,14 @@ label {
 .gamename__text,
 .boardsize__text {
   margin: 1%;
+  text-transform: uppercase;
 }
 .board__area {
-  padding: 10% 15%;
-  width: 25%;
+  padding: 10% 10%;
   float: left;
   background-color: rgba(0, 0, 0, 0.219);
-  border-radius: 1%;
-  /* border: 1px solid rgba(255, 255, 255, 0.089); */
-}
-
-.row {
-  height: 55px;
-  margin-left: 10%;
+  border-radius: 50%;
+  display: flex;
 }
 
 .button,
@@ -195,10 +215,12 @@ label {
 }
 
 .events__area {
-  width: 40%;
-  float: left;
-  margin-left: 2%;
+  width: 50%;
+  float: right;
+  padding-left: 2%;
   margin-top: -4%;
+  height: 60vh;
+  border-left: 1px solid #77da9f5d;
 }
 
 .events__area h2 {
@@ -212,5 +234,38 @@ label {
 .event {
   margin: 1%;
   font-size: 40%;
+  list-style: none;
+}
+
+.slidecontainer {
+  width: 25%;
+  text-transform: uppercase;
+  float: right;
+  margin-top: -8%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 5px;
+  background: #d3d3d360;
+  outline: none;
+  opacity: 0.5;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #f8cc3a;
+  cursor: pointer;
 }
 </style>

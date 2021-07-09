@@ -30,5 +30,12 @@ namespace App.Core.Controllers
             await _gameService.ToggleLight(gameName, x, y);
             return Ok();
         }
+
+        [HttpPost("ReplayEvents")]
+        public async Task<IActionResult> ReplayEvents(string gameName, int end)
+        {
+            await _gameService.Replay(gameName, end);
+            return Ok();
+        }
     }
 }
