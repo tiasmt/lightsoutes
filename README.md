@@ -4,3 +4,4 @@ An implementation of the lights out game using event sourcing. Each action is sa
 
 # Preview 
 
+![](https://user-images.githubusercontent.com/20759400/125062469-b3c69780-e0ae-11eb-8ffb-925537411ae6.gif)
