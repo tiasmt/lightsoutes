@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DataLayer.Migrations
 {
     [DbContext(typeof(GameContext))]
-    [Migration("20210708082657_InitialModel")]
+    [Migration("20210709143245_InitialModel")]
     partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,10 +31,6 @@ namespace App.DataLayer.Migrations
                     b.Property<string>("Data")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("EventType")
                         .HasColumnType("nvarchar(max)");
 
@@ -47,18 +43,33 @@ namespace App.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Event");
                 });
 
             modelBuilder.Entity("App.Contracts.Entities.SnapshotEvent", b =>
                 {
-                    b.HasBaseType("App.Contracts.Entities.Event");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Data")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EventType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GameName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("Version")
                         .HasColumnType("bigint");
 
-                    b.HasDiscriminator().HasValue("SnapshotEvent");
+                    b.HasKey("Id");
+
+                    b.ToTable("Snapshots");
                 });
 #pragma warning restore 612, 618
         }

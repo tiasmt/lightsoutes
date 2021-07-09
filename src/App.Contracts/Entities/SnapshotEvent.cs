@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace App.Contracts.Entities
 {
-    public class SnapshotEvent : Event
+    public class SnapshotEvent
     {
+        public long Id { get; set; }
+        public DateTime Timestamp { get; set; }
+        public string EventType { get; set; }
+        public string GameName { get; set; }
+        public string Data { get; set; }
         public long Version { get; set; }
     }
 }

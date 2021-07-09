@@ -127,7 +127,7 @@ namespace App.Core.Services
                     break;
             }
 
-            if (evnt != null  && isFastForward == false && evnt.EventType != nameof(EmptyEvent))
+            if (isFastForward == false && evnt.EventType != nameof(EmptyEvent))
             {
                 if (!isReplay)
                 {
@@ -140,7 +140,7 @@ namespace App.Core.Services
                 _events.Add(evnt);
             }
            
-            if (evnt != null && evnt.EventType != nameof(EmptyEvent))
+            if (evnt.EventType != nameof(EmptyEvent))
             {
                 var uncommittedEvents = GetUncommittedEvents();
                 await _repository.Save(uncommittedEvents, _gameState);
@@ -200,13 +200,12 @@ namespace App.Core.Services
             try
             {
                 var isFastForward = end == 0;
-                var isReplay = end != 0;
                 var snapshot = await _repository.GetSnapshot(gameName);
                 _gameState = snapshot.State;
                 var events = end == 0 ? await _repository.GetEvents(gameName, snapshot.Version) : await _repository.GetEventsTill(gameName, end);
                 foreach (var evnt in events)
                 {
-                    await ApplyEvent(evnt, isFastForward, isReplay: isReplay);
+                    await ApplyEvent(evnt, isFastForward, isReplay: !isFastForward);
                 }
             }
             catch (Exception ex)
