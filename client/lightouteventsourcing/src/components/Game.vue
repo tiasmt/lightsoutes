@@ -42,20 +42,20 @@
         <div v-for="j in boardSize" :key="j">
           <img
             v-if="
-              lightsOn.find((item) => item.y == i - 1 && item.x == j - 1) !=
+              lightsOn.find((item) => item.x == i - 1 && item.y == j - 1) !=
               undefined
             "
             alt="Lights On"
             src="../assets/images/ON.svg"
             class="light"
-            @click="ToggleLight(j - 1, i - 1)"
+            @click="ToggleLight(i - 1, j - 1)"
           />
           <img
             v-else
             alt="Lights Off"
             src="../assets/images/OFF.svg"
             class="light"
-            @click="ToggleLight(j - 1, i - 1)"
+            @click="ToggleLight(i - 1, j - 1)"
           />
         </div>
         <br />
