@@ -26,8 +26,8 @@
         <input
           type="range"
           min="1"
-          :max= moveIndex
-          :value= moveNumber
+          :max="moveIndex"
+          :value="moveNumber"
           class="slider"
           id="myRange"
           @input="UpdateMove"
@@ -65,7 +65,10 @@
       <label class="events__label">Events</label>
       <div class="events__all">
         <li v-for="(event, index) in events" :key="index" class="event">
-          <div class="event__text">{{ event }} </div>
+          <label class="events__label mini">{{ event.eventType }}</label>
+          <label class="events__label mini position"
+            >X: {{ event.posX }}, Y:{{ event.posY }}</label
+          >
         </li>
       </div>
     </div>
@@ -80,7 +83,7 @@ export default {
     return {
       events: [],
       moveNumber: 1,
-      moveIndex: 1
+      moveIndex: 1,
     };
   },
   computed: {
@@ -88,8 +91,8 @@ export default {
   },
   methods: {
     ToggleLight(x, y) {
-        this.moveIndex++;
-        this.moveNumber = this.moveIndex; 
+      this.moveIndex++;
+      this.moveNumber = this.moveIndex;
       this.events = [];
       this.$store.dispatch("ToggleLight", {
         x: x,
@@ -102,8 +105,8 @@ export default {
       this.moveNumber = slider.value;
     },
     ReplayMove() {
-        this.$store.dispatch("Replay", this.moveNumber);
-    }
+      this.$store.dispatch("Replay", this.moveNumber);
+    },
   },
   mounted() {
     var that = this;
@@ -111,7 +114,14 @@ export default {
       this.$store.dispatch("Update", data);
     });
     this.$gameHub.$on("send-event", (data) => {
-      that.events.push(data);
+      var event = {};
+      event.eventType = data.eventType;
+      if (data.eventType == "LightToggled") {
+        event.posX = data.posX;
+        event.posY = data.posY;
+      }
+
+      that.events.push(event);
     });
   },
   beforeDestroy() {
@@ -184,6 +194,28 @@ label {
   padding: 1% 4%;
 }
 
+.mini {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  margin-left: 2%;
+  margin-top: -15px;
+  margin-right: 3px;
+  width: 8%;
+  float: left;
+  background-color: #77da9e;
+  color: rgb(92, 90, 90);
+  font-weight: 800;
+}
+
+.position {
+  padding-right: 0px;
+  margin-top: -15px;
+  background-color: #f8cc3a;
+  border: 1px solid #f8cc3a;
+  font-size: 90%;
+}
+
 .boardsize__label {
   color: #da7777;
   border: 1px solid #da7777;
@@ -232,37 +264,36 @@ label {
 }
 
 .event {
-  margin-bottom: 1%;
+  margin-bottom: 3%;
   font-size: 35%;
   list-style: none;
 }
 
 .event__text {
-    margin-left: 15px;
-    margin-top: -10px;
+  margin-left: 10px;
+  margin-top: -10px;
 }
 
 li:before {
-  content: ' ';
+  content: " ";
   background-color: #77da9e;
   height: 10px;
   width: 10px;
   border-radius: 50%;
   display: block;
   margin-left: -4px;
-  margin-top: -2%;
-  position: relative;
-}
-li:after {
-  content: ' ';
-  background-color: #77da9e;
-  width: 1px;
-  padding: 20px 1px;
-  display: block;
   margin-top: -3%;
   position: relative;
 }
-
+li:after {
+  content: " ";
+  background-color: #77da9e;
+  width: 1px;
+  padding: 15px 1px;
+  display: block;
+  margin-top: -1%;
+  position: relative;
+}
 
 .slidecontainer {
   width: 25%;
@@ -295,6 +326,4 @@ li:after {
   background: #f8cc3a;
   cursor: pointer;
 }
-
-
 </style>
