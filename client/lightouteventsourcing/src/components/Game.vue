@@ -65,7 +65,7 @@
       <label class="events__label">Events</label>
       <div class="events__all">
         <li v-for="(event, index) in events" :key="index" class="event">
-          {{ event }}
+          <div class="event__text">{{ event }} </div>
         </li>
       </div>
     </div>
@@ -149,7 +149,6 @@ a {
 }
 
 .head {
-  /* padding-top: 5%; */
   height: 100px;
 }
 
@@ -195,7 +194,8 @@ label {
   text-transform: uppercase;
 }
 .board__area {
-  padding: 10% 10%;
+  padding: 5% 5%;
+  margin-left: 10%;
   float: left;
   background-color: rgba(0, 0, 0, 0.219);
   border-radius: 50%;
@@ -228,20 +228,47 @@ label {
 }
 
 .events__all {
-  margin-top: 4%;
+  margin-top: 8%;
 }
 
 .event {
-  margin: 1%;
-  font-size: 40%;
+  margin-bottom: 1%;
+  font-size: 35%;
   list-style: none;
 }
+
+.event__text {
+    margin-left: 15px;
+    margin-top: -10px;
+}
+
+li:before {
+  content: ' ';
+  background-color: #77da9e;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: block;
+  margin-left: -4px;
+  margin-top: -2%;
+  position: relative;
+}
+li:after {
+  content: ' ';
+  background-color: #77da9e;
+  width: 1px;
+  padding: 20px 1px;
+  display: block;
+  margin-top: -3%;
+  position: relative;
+}
+
 
 .slidecontainer {
   width: 25%;
   text-transform: uppercase;
   float: right;
-  margin-top: -8%;
+  margin: -10% 0% 10% 0%;
 }
 
 .slider {
@@ -268,4 +295,6 @@ label {
   background: #f8cc3a;
   cursor: pointer;
 }
+
+
 </style>
