@@ -157,9 +157,7 @@ namespace App.Core.Services
 
         private void Apply(GameCreated gameCreated)
         {
-            _gameState.IsActive = gameCreated.IsActive;
-            _gameState.LightsOn = gameCreated.LightsOn;
-            _gameState.BoardSize = gameCreated.BoardSize;
+            _gameState = new Game(isActive: gameCreated.IsActive, lightsOn: gameCreated.LightsOn, boardSize: gameCreated.BoardSize);
         }
 
 

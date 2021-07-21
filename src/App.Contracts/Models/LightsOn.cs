@@ -15,8 +15,8 @@ namespace App.Contracts.Models
             GameId = gameId;
             On = positions;
         }
-        public List<Position> On {get;set;}
-        public int Id {get;set;}
-        public int GameId {get;set;}
+        public List<Position> On {get;}
+        public int Id {get;}
+        public int GameId {get;}
     }
 }

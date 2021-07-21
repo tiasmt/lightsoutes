@@ -14,7 +14,7 @@ namespace App.Contracts.Events
         {
             GameName = gameName; 
         }
-        public string GameName { get; set; }
+        public string GameName { get; }
 
         public string EventType { get; }  = nameof(EmptyEvent);
     }

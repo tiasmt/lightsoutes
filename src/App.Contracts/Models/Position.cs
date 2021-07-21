@@ -10,7 +10,7 @@ namespace App.Contracts.Models
             Y = y;
         }
 
-        public int Y {get; set;}
-        public int X {get; set;}
+        public int Y {get; }
+        public int X {get; }
     }
 }

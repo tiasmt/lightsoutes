@@ -21,8 +21,8 @@ namespace App.Contracts.Entities
             BoardSize = boardSize;
         }
 
-        public int BoardSize { get; set; }    
-        public bool IsActive { get; set; }
-        public LightsOn LightsOn { get; set; }
+        public int BoardSize { get; }    
+        public bool IsActive { get; }
+        public LightsOn LightsOn { get;}
     }
 }
