@@ -5,17 +5,18 @@
       <h3>VS</h3>
       <img alt="Lights Off" src="../assets/images/OFF.svg" />
     </div>
-        <div class="summary">
-    Lights Out is a puzzle game consisting of an n x n grid of lights. At the beginning of the game, some of the lights are switched on. 
-    When a light is pressed, this light and the four adjacent lights are toggled, i.e., they are switched on if they were off, and switched off otherwise. 
-    The purpose of the game is to switch all the lights off.
+    <div class="summary">
+      Lights Out is a puzzle game consisting of an n x n grid of lights. At the
+      beginning of the game, some of the lights are switched on. When a light is
+      pressed, this light and the four adjacent lights are toggled, i.e., they
+      are switched on if they were off, and switched off otherwise. The purpose
+      of the game is to switch all the lights off.
     </div>
     <div class="options">
       <input class="gamename" v-model="gameName" placeholder="Game Name" />
       <input class="boardsize" v-model="boardSize" placeholder="Board Size" />
       <a class="button create" @click="CreateGame()">New Game</a>
     </div>
-
   </div>
 </template>
 
@@ -24,18 +25,24 @@ export default {
   name: "Home",
   data() {
     return {
-        gameName: "",
-        boardSize: ""
+      gameName: "",
+      boardSize: "",
     };
   },
   methods: {
     CreateGame() {
-      this.$store.dispatch("CreateGame", {gameName: this.gameName, boardSize: this.boardSize});
+      this.$store.dispatch("CreateGame", {
+        gameName: this.gameName,
+        boardSize: this.boardSize,
+      });
     },
   },
   created() {
     this.$gameHub.$on("update-game", (data) => {
       this.$store.dispatch("Update", data);
+    });
+    this.$gameHub.$on("connected", (data) => {
+      this.$store.dispatch("Connected", data);
     });
   },
   beforeDestroy() {
@@ -85,10 +92,10 @@ a {
 }
 
 .summary {
-    margin-top: 5%;
-    font-size: 50%;
-    margin-left: 0%;
-    width: 60%;
+  margin-top: 5%;
+  font-size: 50%;
+  margin-left: 0%;
+  width: 60%;
 }
 
 .create,

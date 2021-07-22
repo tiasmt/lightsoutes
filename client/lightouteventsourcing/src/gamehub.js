@@ -18,6 +18,9 @@ export default {
         connection.on('SendEvent', (payload) => {
             gameHub.$emit('send-event', payload)
         });
+        connection.on('Connected', (payload) => {
+            gameHub.$emit('connected', payload)
+        });
 
         let startedPromise = null;
         function start() {
@@ -26,7 +29,7 @@ export default {
                 return new Promise((resolve, reject) =>
                     setTimeout(() => start().then(resolve).catch(reject), 5000));
             })
-            return startedPromise
+            return startedPromise;
         }
         connection.onclose(() => start());
 
