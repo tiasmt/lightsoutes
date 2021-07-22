@@ -19,22 +19,22 @@ namespace App.Core.Controllers
         }
 
         [HttpPost("CreateGame")]
-        public async Task<IActionResult> CreateGame(int boardSize, string gameName, string playerName)
+        public async Task<IActionResult> CreateGame(int boardSize, string gameName, string playerName, string connectionId)
         {
-            await _gameService.CreateGame(boardSize, gameName, playerName);
+            await _gameService.CreateGame(connectionId, boardSize, gameName, playerName);
             return Ok();
         }
         [HttpPost("ToggleLight")]
-        public async Task<IActionResult> ToggleLight(string gameName, int x, int y)
+        public async Task<IActionResult> ToggleLight(string connectionId, string gameName, int x, int y)
         {
-            await _gameService.ToggleLight(gameName, x, y);
+            await _gameService.ToggleLight(connectionId, gameName, x, y);
             return Ok();
         }
 
         [HttpPost("ReplayEvents")]
-        public async Task<IActionResult> ReplayEvents(string gameName, int end)
+        public async Task<IActionResult> ReplayEvents(string connectionId, string gameName, int end)
         {
-            await _gameService.Replay(gameName, end);
+            await _gameService.Replay(connectionId, gameName, end);
             return Ok();
         }
     }

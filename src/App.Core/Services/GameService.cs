@@ -20,6 +20,7 @@ namespace App.Core.Services
         private readonly IEventRepository _repository;
         private readonly IHubContext<GameHub, IGameHub> _gameHub;
         private readonly ILogger<IGameService> _logger;
+        private string _connectionId = String.Empty;
 
         public int Version { get; protected set; }
         private Game _gameState;
@@ -31,13 +32,14 @@ namespace App.Core.Services
             _logger = logger;
         }
 
-        public async Task CreateGame(int boardSize, string gameName, string playerName)
+        public async Task CreateGame(string connectionId, int boardSize, string gameName, string playerName)
         {
             try
             {
                 if (boardSize <= 0)
                     throw new Exception("Invalid grid size");
 
+                _connectionId = connectionId;
                 var lightsOn = CreateBoard(boardSize: boardSize);
                 await ApplyEvent(new GameCreated(gameName: gameName, boardSize: boardSize, lightsOn: lightsOn, isActive: true));
             }
@@ -47,10 +49,11 @@ namespace App.Core.Services
             }
         }
 
-        public async Task ToggleLight(string gameName, int x, int y)
+        public async Task ToggleLight(string connectionId, string gameName, int x, int y)
         {
             try
             {
+                _connectionId = connectionId;
                 await ApplyEvent(new LightToggled(gameName: gameName, posX: x, posY: y));
             }
             catch (Exception ex)
@@ -59,10 +62,11 @@ namespace App.Core.Services
             }
         }
 
-        public async Task Replay(string gameName, int end)
+        public async Task Replay(string connectionId, string gameName, int end)
         {
             try
             {
+                _connectionId = connectionId;
                 await ApplyEvent(new EmptyEvent( gameName: gameName), end: end);
             }
             catch (Exception ex)
@@ -133,7 +137,7 @@ namespace App.Core.Services
                 {
                     _uncommittedevents.Add(evnt);
                 }
-                await _gameHub.Clients.All.UpdateGame(_gameState);
+                await _gameHub.Clients.Client(_connectionId).UpdateGame(_gameState);
             }
             else
             {
@@ -144,7 +148,7 @@ namespace App.Core.Services
             {
                 var uncommittedEvents = GetUncommittedEvents();
                 await _repository.Save(uncommittedEvents, _gameState);
-                await _gameHub.Clients.All.SendEvent(evnt);
+                await _gameHub.Clients.Client(_connectionId).SendEvent(evnt);
             }
         }
 

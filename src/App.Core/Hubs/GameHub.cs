@@ -10,14 +10,19 @@ namespace App.Core.Hubs
 {
     public class GameHub : Hub<IGameHub>
     {
-        public async Task SendGame(Game game)
+
+        public async override Task OnConnectedAsync()
         {
-            await Clients.All.UpdateGame(game);
+            await Clients.Client(Context.ConnectionId).Connected(Context.ConnectionId);
+        }
+        public async Task SendGame(string gameName, Game game)
+        {
+            await Clients.User(gameName).UpdateGame(game);
         }
 
         public async Task SentLatestEvent(IEvent evnt)
         {
-            await Clients.All.SendEvent(evnt);
+            await Clients.User(evnt.GameName).SendEvent(evnt);
         }
     }
 }
