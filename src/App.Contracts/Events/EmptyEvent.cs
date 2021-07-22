@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace App.Contracts.Events
 {
-    public class EmptyEvent : IEvent
+    public record EmptyEvent : IEvent
     {
 
         public EmptyEvent(string gameName)
         {
             GameName = gameName; 
         }
-        public string GameName { get; set; }
+        public string GameName { get; }
 
         public string EventType { get; }  = nameof(EmptyEvent);
     }
