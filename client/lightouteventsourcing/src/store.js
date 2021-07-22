@@ -25,7 +25,7 @@ export default new Vuex.Store({
       console.log(state);
     },
     update(state, data) {
-      state.lightsOn = data.lightsOn.on;
+      state.lightsOn = data.lightsOn;
       state.isActive = data.isActive;
       state.boardSize = parseInt(data.boardSize);
     },

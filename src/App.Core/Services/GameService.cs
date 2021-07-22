@@ -76,11 +76,11 @@ namespace App.Core.Services
 
         }
 
-        public LightsOn CreateBoard(int boardSize)
+        public List<Position> CreateBoard(int boardSize)
         {
             var rnd = new Random();
             var numberOfLightsOn = rnd.Next(1, boardSize);
-            var lightsOn = new LightsOn();
+            var lightsOn = new List<Position>();
             for (var i = 0; i < numberOfLightsOn; i++)
             {
                 int x = rnd.Next(0, boardSize - 1);
@@ -95,19 +95,19 @@ namespace App.Core.Services
             return lightsOn;
         }
 
-        private LightsOn Toggle(LightsOn lights, int x, int y)
+        private List<Position> Toggle(List<Position> lights, int x, int y)
         {
-            if (lights.On.Exists(l => (l.X == x && l.Y == y)))
-                lights.On.RemoveAll(l => (l.X == x && l.Y == y));
+            if (lights.Exists(l => (l.X == x && l.Y == y)))
+                lights.RemoveAll(l => (l.X == x && l.Y == y));
             else
-                lights.On.Add(new Position(x, y));
+                lights.Add(new Position(x, y));
 
             return lights;
         }
 
-        private bool IsGameActive(LightsOn lightsOn)
+        private bool IsGameActive(List<Position> lightsOn)
         {
-            var result = lightsOn.On.Count > 0 ? true : false;
+            var result = lightsOn.Count > 0 ? true : false;
             return result;
         }
 
@@ -173,7 +173,7 @@ namespace App.Core.Services
 
         }
 
-        public LightsOn ToggleLights(LightsOn lights, int x, int y, int size)
+        public List<Position> ToggleLights(List<Position> lights, int x, int y, int size)
         {
 
             if (x >= size || y >= size || x < 0 || y < 0)

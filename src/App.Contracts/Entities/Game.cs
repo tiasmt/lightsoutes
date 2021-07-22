@@ -14,7 +14,7 @@ namespace App.Contracts.Entities
         
         }
 
-        public Game(bool isActive, LightsOn lightsOn, int boardSize)
+        public Game(bool isActive, List<Position> lightsOn, int boardSize)
         {
             IsActive = isActive;
             LightsOn = lightsOn;
@@ -23,6 +23,7 @@ namespace App.Contracts.Entities
 
         public int BoardSize { get; set; }    
         public bool IsActive { get; set; }
-        public LightsOn LightsOn { get; set; }
+        public List<Position> LightsOn { get; set; }
+
     }
 }
