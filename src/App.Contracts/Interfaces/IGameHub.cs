@@ -11,5 +11,6 @@ namespace App.Contracts.Interfaces
     {
         Task UpdateGame(Game game);
         Task SendEvent(IEvent evnt);
+        Task Connected(string connectionId);
     }
 }
