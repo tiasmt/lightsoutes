@@ -161,15 +161,14 @@ namespace App.Core.Services
 
         private void Apply(GameCreated gameCreated)
         {
-            _gameState.IsActive = gameCreated.IsActive;
-            _gameState.LightsOn = gameCreated.LightsOn;
-            _gameState.BoardSize = gameCreated.BoardSize;
+            _gameState = new Game(lightsOn: gameCreated.LightsOn, isActive: true, boardSize: gameCreated.BoardSize);
         }
 
 
         private void Apply(LightToggled lightToggled)
         {
-            _gameState.LightsOn = ToggleLights(_gameState.LightsOn, lightToggled.PosX, lightToggled.PosY, _gameState.BoardSize);
+            var lightsOn = ToggleLights(_gameState.LightsOn, lightToggled.PosX, lightToggled.PosY, _gameState.BoardSize);
+            _gameState = new Game(lightsOn: lightsOn, isActive: _gameState.IsActive, boardSize: _gameState.BoardSize);
 
         }
 

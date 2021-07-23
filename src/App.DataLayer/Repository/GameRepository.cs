@@ -52,7 +52,7 @@ namespace App.DataLayer.Repository
             var snapshotEvent = await _context.Snapshots.Where(e => e.GameName == gameName)
                                                         .OrderByDescending(s => s.Id)
                                                         .FirstOrDefaultAsync();
-            var snapshot = snapshotEvent == null ? new Snapshot() : JsonConvert.DeserializeObject<Snapshot>(snapshotEvent.Data);
+            var snapshot = snapshotEvent == null ? new Snapshot(new Game(), version: 0) : JsonConvert.DeserializeObject<Snapshot>(snapshotEvent.Data);
             return snapshot;
         }
 
@@ -79,7 +79,7 @@ namespace App.DataLayer.Repository
         {
             try
             {
-                var jsonData = JsonConvert.SerializeObject(new Snapshot { State = game, Version = version });
+                var jsonData = JsonConvert.SerializeObject(new Snapshot (state: game, version: version));
                 await _context.Snapshots.AddAsync(new SnapshotEvent { Version = version, GameName = gameName, EventType = nameof(Snapshot), Timestamp = DateTime.UtcNow, Data = jsonData });
                 await _context.SaveChangesAsync();
             }
